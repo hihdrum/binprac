@@ -1,9 +1,7 @@
+#include <iostream>
 #include <string>
-#include <string_view>
-#include <cstdlib>
-#include <cstdio>
+#include <fstream>
 #include <cctype>
-#include <cstring>
 
 void asciiDump(char *pc, int len);
 
@@ -33,6 +31,39 @@ struct jnl_header
   char kind[JNL_KIND_LEN];
   char dataLen[JNL_DATA_LEN];
 
+  friend std::istream& operator>>(std::istream& is, jnl_header& h)
+  {
+    is.read(h.year, JNL_YEAR_LEN);
+    is.read(h.month, JNL_MONTH_LEN);
+    is.read(h.day, JNL_DAY_LEN);
+    is.read(h.hour, JNL_HOUR_LEN);
+    is.read(h.minute, JNL_MINUTE_LEN);
+    is.read(h.second, JNL_SECOND_LEN);
+    is.read(h.msecond, JNL_MSECOND_LEN);
+    is.read(h.kind, JNL_KIND_LEN);
+    is.read(h.dataLen, JNL_DATA_LEN);
+
+    return is;
+  }
+
+  friend std::ostream& operator<<(std::ostream& os, const jnl_header& h)
+  {
+    os.write(h.year, JNL_YEAR_LEN) << "/";
+    os.write(h.month, JNL_MONTH_LEN) << "/";
+    os.write(h.day, JNL_DAY_LEN);
+    os << ",";
+    os.write(h.hour, JNL_HOUR_LEN) << ":";
+    os.write(h.minute, JNL_MINUTE_LEN) << ":";
+    os.write(h.second, JNL_SECOND_LEN) << ".";
+    os.write(h.msecond, JNL_MSECOND_LEN);
+    os << ",";
+    os.write(h.kind, JNL_KIND_LEN);
+    os << ",";
+    os.write(h.dataLen, JNL_DATA_LEN);
+
+    return os;
+  }
+
   void print();
   size_t dataLength();
 
@@ -58,6 +89,7 @@ size_t jnl_header::dataLength()
   return std::stoi(str);
 }
 
+#if 0
 const int dataBufferSize = 20 * 1024 * 1024;
 char *dataBuffer;
 
@@ -163,6 +195,66 @@ int main(int argc, char *argv[])
   {
     asciiDumpArgs(argc, argv);
   }
+
+  return 0;
+}
+#endif
+
+int main(int argc, char *argv[])
+{
+  if(argc < 2)
+  {
+    std::cerr << "Usage : " << argv[0] << "ファイル名" << std::endl;
+    std::exit(1);
+  }
+
+  std::ifstream ifs{argv[1], std::ios_base::in};
+  if(!ifs)
+  {
+    std::perror("ファイルオープン異常");
+    std::exit(1);
+  }
+
+  struct jnl_header jnlh;
+
+  while(1)
+  {
+    ifs >> jnlh;
+    if(ifs.eof())
+    {
+      break;
+    }
+
+    std::cout << "HEADER" << "," << jnlh << std::endl;
+
+    std::streamsize dataLen = jnlh.dataLength();
+    constexpr std::streamsize buffer_size = 20 * 1024 * 1024;
+    auto *buffer = new char[buffer_size];
+
+    ifs.read(buffer, dataLen);
+    if(ifs.gcount() < dataLen)
+    {
+      std::cerr << "read異常" << std::endl;
+      std::exit(1);
+    }
+
+    std::cout << "DATA:";
+    for(int i = 0; i < dataLen; i++)
+    {
+      if(std::isprint(buffer[i]))
+      {
+        std::cout << buffer[i];
+      }
+      else
+      {
+        std::cout << '.';
+      }
+    }
+
+    std::cout << std::endl;
+
+  }
+
 
   return 0;
 }
