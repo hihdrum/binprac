@@ -1,0 +1,121 @@
+#+title : バイナリフォーマット
+
+バイナリフォーマットを扱うプログラムの練習
+
+構造
+
+- 日付 : 17 : YYYYmmddHHMMSSsss
+  - YYYY : 4 : 年
+  - mm : 2 : 月
+  - dd : 2 : 日
+  - HH : 2 : 時
+  - MM : 2 : 分
+  - SS : 2 : 秒
+  - sss : 3 : ミリ秒
+- 区分 : K : 1 :
+  - R : 受信
+  - S : 送信
+- 後続データ長 : 8 : ASCII数値文字0埋め
+- データ : データ長で指定されたデータ
+
+
+* 自開発環境
+
+#+begin_src shell :results scalar
+  gcc --version
+#+end_src
+
+#+RESULTS:
+: gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+: Copyright (C) 2021 Free Software Foundation, Inc.
+: This is free software; see the source for copying conditions.  There is NO
+: warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+: 
+
+* 時関系のメモ
+
+- 型系の情報
+  - time_t : 時刻紀元からの秒数。
+  - struct tm : 日時情報を格納する構造体である。秒未満の情報は無い。
+    tm_yearの値は、1900年を基準とした値であることに注意する。
+  - struct timespec : 秒とナノ秒の情報を格納する構造体である。
+- 関数系の情報
+  - time : 時刻紀元からの秒数を返す。
+  - struct tm *gmtime(const time_t timep) : time_tからtmの情報を得る。
+    呼び出し時に戻り値としてポイントされている領域が更新される。
+  - time_t mktime(struct tm* timeptr) : tmの情報からtime_tを得る。
+  - int timespec_get(timespec* ts, int base) : tsの情報を得る。
+    成功時の戻り値:base値、失敗時の戻り値:0
+- その他
+  - 時刻紀元 : 1970/01/01 00:00:00 +0000 (UTC)
+  - time.hにTIME_UTCがtimespec_getのbase値で有ることがコメントとして記載されている。
+  - ctimeはコメントにあるとおり、ime.hで定義されたマクロをundefで未定義にし、代わりにstd名前空間で
+    利用できるようにしている。
+
+
+#+begin_src c
+  /* time.h */
+  struct timespec {
+    time_t tv_sec;  /* Seconds */
+    long   tv_nsec; /* Nanoseconds */
+  };
+#+end_src
+
+#+begin_src cpp
+  template<class toDuration, class Rep, class Period>
+    constexpr ToDuration duration_cast(const duration<Rep, Period>& d);
+#+end_src
+
+* 時関係関数マニュアルのメモ
+
+- 関数gmtime
+  - struct tm *gmtime(const time_t *timep)
+  - カレンダー時刻 timep を協定世界時(UTC)での要素別の時刻へ変換する。
+- 関数localtime
+  - struct tm *localtime(const time_t *timep)
+  - カレンダー時刻 timep をユーザーが指定したタイムゾーンでの時刻要素別の表現へ変換する。
+- 関数mktime
+  - time_t mktime(struct tm *tm)
+  - ローカルタイムで記述されている要素別の時刻をカレンダー時刻へ変換する。
+
+
+* C言語版のプロファイル
+
+- 実行バイナリ : C言語版 : 693005e9135222e26019a6a5b2674c749028e852
+- コンパイルコマンド : gcc -Wall -pg jnl_ascii_dump.c
+- 実行コマンド : ./a.out ../data/data00* > /dev/null
+
+#+begin_example
+index % time    self  children    called     name
+                0.10    0.00     100/100         dumpStream [2]
+[1]     71.4    0.10    0.00     100         asciiDump [1]
+-----------------------------------------------
+                0.00    0.10      10/10          asciiDumpArgs [3]
+[2]     71.4    0.00    0.10      10         dumpStream [2]
+                0.10    0.00     100/100         asciiDump [1]
+                0.00    0.00     100/100         printJnlHeader [6]
+-----------------------------------------------
+                0.00    0.10       1/1           main [4]
+[3]     71.4    0.00    0.10       1         asciiDumpArgs [3]
+                0.00    0.10      10/10          dumpStream [2]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     71.4    0.00    0.10                 main [4]
+                0.00    0.10       1/1           asciiDumpArgs [3]
+-----------------------------------------------
+                                                 <spontaneous>
+[5]     28.6    0.04    0.00                 _init [5]
+-----------------------------------------------
+                0.00    0.00     100/100         dumpStream [2]
+[6]      0.0    0.00    0.00     100         printJnlHeader [6]
+-----------------------------------------------
+#+end_example
+    
+
+* メモ
+
+- journal
+  - a newspaper of magazine that deals with a particular subject or prefession
+  - a written record of the things you do, see etc. every day.
+  
+- info gcc, 6.62.11 Structure-Layout Pragmas
