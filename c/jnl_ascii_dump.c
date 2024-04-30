@@ -67,7 +67,7 @@ void dumpStream(FILE *fp)
       exit(1);
     }
 
-    printf("HEADER:");
+    printf("HEADER,");
     printJnlHeader(&jnlh);
     putchar('\n');
 
