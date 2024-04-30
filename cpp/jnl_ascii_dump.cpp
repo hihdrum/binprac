@@ -1,3 +1,5 @@
+#include <string>
+#include <string_view>
 #include <cstdlib>
 #include <cstdio>
 #include <cctype>
@@ -32,6 +34,7 @@ struct jnl_header
   char dataLen[JNL_DATA_LEN];
 
   void print();
+  size_t dataLength();
 
 } __attribute__((packed));
 
@@ -47,6 +50,12 @@ void jnl_header::print()
       JNL_MSECOND_LEN, JNL_MSECOND_LEN, msecond,
       JNL_KIND_LEN, JNL_KIND_LEN, kind,
       JNL_DATA_LEN, JNL_DATA_LEN, dataLen);
+}
+
+size_t jnl_header::dataLength()
+{
+  auto str = std::string{dataLen, JNL_DATA_LEN};
+  return std::stoi(str);
 }
 
 const int dataBufferSize = 20 * 1024 * 1024;
@@ -73,11 +82,7 @@ void dumpStream(FILE *fp)
     jnlh.print();
     std::putchar('\n');
 
-    char dataLenBuf[JNL_DATA_LEN + 1];
-    std::memcpy(dataLenBuf, jnlh.dataLen, JNL_DATA_LEN);
-    dataLenBuf[JNL_DATA_LEN] = '\0';
-
-    size_t dataLen = std::atoi(dataLenBuf);
+    size_t dataLen = jnlh.dataLength();
 
     retFread = std::fread(dataBuffer, sizeof(char), dataLen, fp);
     if(retFread < dataLen)
