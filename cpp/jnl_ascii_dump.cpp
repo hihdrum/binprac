@@ -46,6 +46,13 @@ struct jnl_header
     return is;
   }
 
+  static jnl_header readStream(std::istream& is)
+  {
+    jnl_header h;
+    is >> h;
+    return h;
+  }
+
   friend std::ostream& operator<<(std::ostream& os, const jnl_header& h)
   {
     os.write(h.year, JNL_YEAR_LEN) << "/";
@@ -65,7 +72,7 @@ struct jnl_header
   }
 
   void print();
-  size_t dataLength();
+  size_t dataLength() const;
 
 } __attribute__((packed));
 
@@ -83,7 +90,7 @@ void jnl_header::print()
       JNL_DATA_LEN, JNL_DATA_LEN, dataLen);
 }
 
-size_t jnl_header::dataLength()
+size_t jnl_header::dataLength() const
 {
   auto str = std::string{dataLen, JNL_DATA_LEN};
   return std::stoi(str);
@@ -234,8 +241,7 @@ int main(int argc, char *argv[])
 
   while(1)
   {
-    struct jnl_header jnlh;
-    ifs >> jnlh;
+    const jnl_header jnlh = jnl_header::readStream(ifs);
     if(ifs.eof())
     {
       break;
