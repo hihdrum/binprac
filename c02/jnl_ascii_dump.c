@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 
-void asciiDump(char *pc, int len);
+void asciiDump(const char *pc, int len);
 
 #define JNL_YEAR_LEN (4)
 #define JNL_MONTH_LEN (2)
@@ -34,7 +34,7 @@ struct jnl_header
 
 } __attribute__((packed));
 
-void jnl_header_read(struct jnl_header *h, FILE *in)
+void jnl_header_read(struct jnl_header * const h, FILE *in)
 {
   size_t retFread = fread(h, sizeof(struct jnl_header), 1, in);
   if(1 != retFread)
@@ -66,7 +66,7 @@ struct jnl_record
   char data[0];
 } __attribute__((packed));
 
-void jnl_record_read(struct jnl_record *r, FILE *in)
+void jnl_record_read(struct jnl_record * const r, FILE *in)
 {
   jnl_header_read(&r->h, in);
   if(feof(in))
@@ -84,9 +84,9 @@ void jnl_record_read(struct jnl_record *r, FILE *in)
 }
 
 /*-----------------------------------------------------*/
-void jnl_record_dump_printHeader(struct jnl_record *r)
+void jnl_record_dump_printHeader(const struct jnl_record * const r)
 {
-  struct jnl_header *h = &r->h;
+  const struct jnl_header * const h = &r->h;
 
   printf("HEADER,");
   printf("%*.*s/%*.*s/%*.*s,%*.*s:%*.*s:%*.*s.%*.*s,%*.*s,%*.*s",
@@ -102,7 +102,7 @@ void jnl_record_dump_printHeader(struct jnl_record *r)
   putchar('\n');
 }
 
-void jnl_record_dump_data(struct jnl_record *r, void (*dumpf)(char *, int))
+void jnl_record_dump_data(const struct jnl_record *r, void (*dumpf)(const char *, int))
 {
   int dataLen = jnl_header_dataLen(&r->h);
   printf("DATA:");
@@ -110,7 +110,7 @@ void jnl_record_dump_data(struct jnl_record *r, void (*dumpf)(char *, int))
   putchar('\n');
 }
 
-void jnl_record_print(struct jnl_record *r)
+void jnl_record_print(const struct jnl_record *r)
 {
   jnl_record_dump_printHeader(r);
   jnl_record_dump_data(r, asciiDump);

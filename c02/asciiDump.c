@@ -3,7 +3,7 @@
 #include <ctype.h>
 
 /* 1文字毎の出力関数呼び出し */
-void asciiDump(char *pc, int len)
+void asciiDump(const char *pc, int len)
 {
   for(int i = 0; i < len; i++)
   {
