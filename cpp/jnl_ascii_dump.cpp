@@ -71,24 +71,9 @@ struct jnl_header
     return os;
   }
 
-  void print();
   size_t dataLength() const;
 
 } __attribute__((packed));
-
-void jnl_header::print()
-{
-  std::printf("%*.*s/%*.*s/%*.*s,%*.*s:%*.*s:%*.*s.%*.*s,%*.*s,%*.*s",
-      JNL_YEAR_LEN, JNL_YEAR_LEN, year,
-      JNL_MONTH_LEN, JNL_MONTH_LEN, month,
-      JNL_DAY_LEN, JNL_DAY_LEN, day,
-      JNL_HOUR_LEN, JNL_HOUR_LEN, hour,
-      JNL_MINUTE_LEN, JNL_MINUTE_LEN, minute,
-      JNL_SECOND_LEN, JNL_SECOND_LEN, second,
-      JNL_MSECOND_LEN, JNL_MSECOND_LEN, msecond,
-      JNL_KIND_LEN, JNL_KIND_LEN, kind,
-      JNL_DATA_LEN, JNL_DATA_LEN, dataLen);
-}
 
 size_t jnl_header::dataLength() const
 {
