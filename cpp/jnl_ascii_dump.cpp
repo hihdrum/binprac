@@ -231,10 +231,10 @@ int main(int argc, char *argv[])
     std::exit(1);
   }
 
-  struct jnl_header jnlh;
 
   while(1)
   {
+    struct jnl_header jnlh;
     ifs >> jnlh;
     if(ifs.eof())
     {
