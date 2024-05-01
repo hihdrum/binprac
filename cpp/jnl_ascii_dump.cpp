@@ -200,6 +200,22 @@ int main(int argc, char *argv[])
 }
 #endif
 
+/* 1文字毎の出力関数呼び出し */
+void asciiDump(char *pc, int len)
+{
+  for(int i = 0; i < len; i++)
+  {
+    if(std::isprint(*pc))
+    {
+      std::putchar(*pc);
+    }
+    else
+    {
+      std::putchar('.');
+    }
+  }
+}
+
 int main(int argc, char *argv[])
 {
   if(argc < 2)
@@ -239,18 +255,7 @@ int main(int argc, char *argv[])
     }
 
     std::cout << "DATA:";
-    for(int i = 0; i < dataLen; i++)
-    {
-      if(std::isprint(buffer[i]))
-      {
-        std::cout << buffer[i];
-      }
-      else
-      {
-        std::cout << '.';
-      }
-    }
-
+    asciiDump(buffer, dataLen);
     std::cout << std::endl;
 
   }
