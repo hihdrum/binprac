@@ -33,6 +33,21 @@ struct jnl_header
 
 } __attribute__((packed));
 
+void jnl_header_read(struct jnl_header *h, FILE *in)
+{
+  size_t retFread = fread(h, sizeof(struct jnl_header), 1, in);
+  if(1 != retFread)
+  {
+    if(feof(in))
+    {
+      return;
+    }
+
+    perror("ジャーナルヘッダfread異常");
+    exit(1);
+  }
+}
+
 int jnl_header_dataLen(const struct jnl_header * const h)
 {
   char dataLenBuf[JNL_DATA_LEN + 1];
@@ -65,20 +80,14 @@ struct jnl_record
 
 void jnl_record_read(struct jnl_record *r, FILE *in)
 {
-  size_t retFread = fread(&r->h, sizeof(struct jnl_header), 1, in);
-  if(1 != retFread)
+  jnl_header_read(&r->h, in);
+  if(feof(in))
   {
-    if(feof(in))
-    {
-      return;
-    }
-
-    perror("ジャーナルヘッダfread異常");
-    exit(1);
+    return;
   }
 
   int dataLen = jnl_header_dataLen(&r->h);
-  retFread = fread(r->data, sizeof(char), dataLen, in);
+  size_t retFread = fread(r->data, sizeof(char), dataLen, in);
   if(retFread < dataLen)
   {
     perror("データfread異常");
@@ -95,6 +104,10 @@ void dumpStream(FILE *fp)
   {
     struct jnl_record *pjlr = (struct jnl_record *)dataBuffer;
     jnl_record_read(pjlr, fp);
+    if(feof(fp))
+    {
+      break;
+    }
 
     printf("HEADER,");
     printJnlHeader(&pjlr->h);
