@@ -102,6 +102,13 @@ void jnl_record_dump_printHeader(struct jnl_record *r)
   putchar('\n');
 }
 
+void jnl_record_dump_data(struct jnl_record *r, void (*dumpf)(char *, int))
+{
+  int dataLen = jnl_header_dataLen(&r->h);
+  printf("DATA:");
+  dumpf(r->data, dataLen);
+  putchar('\n');
+}
 
 const int dataBufferSize = 20 * 1024 * 1024;
 char *dataBuffer;
@@ -118,11 +125,7 @@ void dumpStream(FILE *fp)
     }
 
     jnl_record_dump_printHeader(pjlr);
-
-    int dataLen = jnl_header_dataLen(&pjlr->h);
-    printf("DATA:");
-    asciiDump(pjlr->data, dataLen);
-    putchar('\n');
+    jnl_record_dump_data(pjlr, asciiDump);
   }
 }
 
