@@ -1,6 +1,24 @@
 import java.io.IOException;
 import java.io.FileInputStream;
 
+class JnlHeader
+{
+  final static int SIZE = 26;
+
+  byte[] h;
+
+  JnlHeader(byte[] h)
+  {
+    this.h = h;
+  }
+
+  void print()
+  {
+    String str = new String(h, 0, SIZE);
+    System.out.printf("%s\n", str);
+  }
+}
+
 class Main
 {
   public static void main(String[] args)
@@ -12,9 +30,9 @@ class Main
     {
       System.out.println("ファイル(" + args[0] + ")を開きました。");
 
-      in.read(buffer, 0, 20);
-      String str = new String(buffer, 0, 20);
-      System.out.printf("%s\n", str);
+      in.read(buffer, 0, JnlHeader.SIZE);
+      JnlHeader jnlHeader = new JnlHeader(buffer);
+      jnlHeader.print();
     }
     catch(IOException e)
     {
