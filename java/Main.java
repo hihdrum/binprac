@@ -39,9 +39,9 @@ class JnlHeader
 {
   final static int SIZE = 26;
 
-  byte[] h;
+  final byte[] h;
 
-  JnlHeader(byte[] h)
+  JnlHeader(final byte[] h)
   {
     this.h = h;
   }
