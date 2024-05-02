@@ -5,8 +5,8 @@ CXXFLAGS += -Wall -MMD
 CXXFLAGS += -g3
 CXXFLAGS += -O0
 
-$(TARGET) : jnl.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
+$(TARGET) : jnl.o jnl_ascii_dump.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
 .PHONY : clean
 clean:
