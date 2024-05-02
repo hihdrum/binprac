@@ -59,19 +59,6 @@ std::ostream& Jnl::header::write(std::ostream& os)
 
 /* ジャーナルレコード */
 /*------------------------------------------------------------*/
-#if 0
-Jnl::record* Jnl::record::read(char *buffer, std::istream& is)
-{
-  Jnl::record* pJnlRecord = (Jnl::record *)buffer;
-  pJnlRecord->h.read(buffer, is);
-
-  int dataLen = pJnlRecord->h.len();
-  is.read(pJnlRecord->data, dataLen);
-
-  return pJnlRecord;
-}
-#endif
-
 Jnl::record& Jnl::record::read(char *buffer, std::istream& is)
 {
   Jnl::record* pJnlRecord = (Jnl::record *)buffer;
@@ -111,10 +98,8 @@ std::ostream& Jnl::record::write(std::ostream& os = std::cout)
   return os;
 }
 
-void Jnl::record::proc(std::istream& is, std::ostream& os)
+void Jnl::record::proc(std::vector<char>& buffer, std::istream& is, std::ostream& os)
 {
-  std::vector<char> buffer = std::vector<char>(20 * 1024 * 1024);
-
   while(1)
   {
     record& jnlRecord = read(buffer.data(), is);
