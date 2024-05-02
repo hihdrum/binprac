@@ -110,6 +110,11 @@ class JnlHeader
     return hour() + ":" + minute() + ":" + second() + "." + msecond();
   }
 
+  public int dataLen()
+  {
+    return Integer.parseInt(data());
+  }
+
   void print()
   {
     String str = new String(h, 0, SIZE);
@@ -133,6 +138,7 @@ class Main
       System.out.printf("%s/\n", jnlHeader.year());
       jnlHeader.print();
       System.out.printf("date : %s\n", jnlHeader.date());
+      System.out.printf("dateLen : %d\n", jnlHeader.dataLen());
       System.out.printf("time : %s\n", jnlHeader.time());
     }
     catch(IOException e)
