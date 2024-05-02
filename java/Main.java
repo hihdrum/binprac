@@ -51,6 +51,11 @@ class JnlHeader
     byte[] buffer = new byte[SIZE];
     int readByte = in.read(buffer);
 
+    if(SIZE != readByte)
+    {
+      throw new IOException("読込み長が足りませんでした。");
+    }
+
     h = buffer;
   }
 
