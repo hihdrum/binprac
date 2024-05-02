@@ -13,6 +13,8 @@ class Main
       System.out.println("ファイル(" + args[0] + ")を開きました。");
 
       in.read(buffer, 0, 20);
+      String str = new String(buffer, 0, 20);
+      System.out.printf("%s\n", str);
     }
     catch(IOException e)
     {
