@@ -1,6 +1,40 @@
 import java.io.IOException;
 import java.io.FileInputStream;
 
+enum JnlHeaderInfo
+{
+  YEAR(0, 4),
+  MONTH(4, 2),
+  DAY(6, 2),
+
+  HOUR(8, 2),
+  MINUTE(10, 2),
+  SECOND(12, 2),
+  MSECOND(14, 3),
+
+  KIND(17, 1),
+  DATA(18, 8);
+
+  private final int offset;
+  private final int len;
+
+  private JnlHeaderInfo(int offset, int len)
+  {
+    this.offset = offset;
+    this.len = len;
+  }
+
+  public int offset()
+  {
+    return offset;
+  }
+
+  public int len()
+  {
+    return len;
+  }
+}
+
 class JnlHeader
 {
   final static int SIZE = 26;
@@ -12,10 +46,68 @@ class JnlHeader
     this.h = h;
   }
 
-  String year()
+  public String year()
   {
-    String str = new String(h, 0, 4);
+    String str = new String(h, JnlHeaderInfo.YEAR.offset(), JnlHeaderInfo.YEAR.len());
     return str;
+  }
+
+  public String month()
+  {
+    String str = new String(h, JnlHeaderInfo.MONTH.offset(), JnlHeaderInfo.MONTH.len());
+    return str;
+  }
+
+  public String day()
+  {
+    String str = new String(h, JnlHeaderInfo.DAY.offset(), JnlHeaderInfo.DAY.len());
+    return str;
+  }
+
+  public String hour()
+  {
+    String str = new String(h, JnlHeaderInfo.HOUR.offset(), JnlHeaderInfo.HOUR.len());
+    return str;
+  }
+
+  public String minute()
+  {
+    String str = new String(h, JnlHeaderInfo.MINUTE.offset(), JnlHeaderInfo.MINUTE.len());
+    return str;
+  }
+
+  public String second()
+  {
+    String str = new String(h, JnlHeaderInfo.SECOND.offset(), JnlHeaderInfo.SECOND.len());
+    return str;
+  }
+
+  public String msecond()
+  {
+    String str = new String(h, JnlHeaderInfo.MSECOND.offset(), JnlHeaderInfo.MSECOND.len());
+    return str;
+  }
+
+  public String kind()
+  {
+    String str = new String(h, JnlHeaderInfo.KIND.offset(), JnlHeaderInfo.KIND.len());
+    return str;
+  }
+
+  public String data()
+  {
+    String str = new String(h, JnlHeaderInfo.DATA.offset(), JnlHeaderInfo.DATA.len());
+    return str;
+  }
+
+  public String date()
+  {
+    return year() + "/" + month() + "/" + day();
+  }
+
+  public String time()
+  {
+    return hour() + ":" + minute() + ":" + second() + "." + msecond();
   }
 
   void print()
@@ -40,6 +132,8 @@ class Main
       JnlHeader jnlHeader = new JnlHeader(buffer);
       System.out.printf("%s/\n", jnlHeader.year());
       jnlHeader.print();
+      System.out.printf("date : %s\n", jnlHeader.date());
+      System.out.printf("time : %s\n", jnlHeader.time());
     }
     catch(IOException e)
     {
