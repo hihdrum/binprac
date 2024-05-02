@@ -39,7 +39,7 @@ class JnlHeader
 {
   final static int SIZE = 26;
 
-  final byte[] h;
+  final private byte[] h;
 
   JnlHeader(final byte[] h)
   {
