@@ -111,10 +111,8 @@ std::ostream& Jnl::record::write(std::ostream& os = std::cout)
   return os;
 }
 
-void Jnl::record::proc(std::istream& is, std::ostream& os)
+void Jnl::record::proc(std::vector<char>& buffer, std::istream& is, std::ostream& os)
 {
-  std::vector<char> buffer = std::vector<char>(20 * 1024 * 1024);
-
   while(1)
   {
     record& jnlRecord = read(buffer.data(), is);

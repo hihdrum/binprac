@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 /* ジャーナルヘッダメンババイト長 */
 /*------------------------------------------------------------*/
@@ -58,7 +59,7 @@ namespace Jnl
 
     //static record* read(char *buffer, std::istream& is);
     static record& read(char *buffer, std::istream& is);
-    static void proc(std::istream& is, std::ostream& os);
+    static void proc(std::vector<char>& buffer, std::istream& is, std::ostream& os);
 
     void dumpData(std::ostream& os);
     std::ostream& write(std::ostream& os);
