@@ -46,6 +46,14 @@ class JnlHeader
     this.h = h;
   }
 
+  JnlHeader(FileInputStream in) throws IOException
+  {
+    byte[] buffer = new byte[SIZE];
+    int readByte = in.read(buffer);
+
+    h = buffer;
+  }
+
   public String year()
   {
     String str = new String(h, JnlHeaderInfo.YEAR.offset(), JnlHeaderInfo.YEAR.len());
@@ -126,6 +134,7 @@ class Main
 {
   public static void main(String[] args)
   {
+
     final int buffer_size = 20 * 1024 * 1024;
     byte[] buffer = new byte[buffer_size];
 
@@ -133,8 +142,8 @@ class Main
     {
       System.out.println("ファイル(" + args[0] + ")を開きました。");
 
-      in.read(buffer, 0, JnlHeader.SIZE);
-      JnlHeader jnlHeader = new JnlHeader(buffer);
+      JnlHeader jnlHeader = new JnlHeader(in);
+
       System.out.printf("%s/\n", jnlHeader.year());
       jnlHeader.print();
       System.out.printf("date : %s\n", jnlHeader.date());
