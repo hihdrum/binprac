@@ -12,6 +12,12 @@ class JnlHeader
     this.h = h;
   }
 
+  String year()
+  {
+    String str = new String(h, 0, 4);
+    return str;
+  }
+
   void print()
   {
     String str = new String(h, 0, SIZE);
@@ -32,6 +38,7 @@ class Main
 
       in.read(buffer, 0, JnlHeader.SIZE);
       JnlHeader jnlHeader = new JnlHeader(buffer);
+      System.out.printf("%s/\n", jnlHeader.year());
       jnlHeader.print();
     }
     catch(IOException e)
