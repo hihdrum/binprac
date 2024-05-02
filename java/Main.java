@@ -135,6 +135,24 @@ class JnlHeader
   }
 }
 
+class JnlRecord
+{
+  JnlHeader h;
+  byte[] data;
+
+  public JnlRecord(FileInputStream in) throws IOException
+  {
+    h = new JnlHeader(in);
+    data = new byte[h.dataLen()];
+
+    int readByte = in.read(data);
+    if(h.dataLen() != readByte)
+    {
+      throw new IOException("読込み長が足りませんでした。");
+    }
+  }
+}
+
 class Main
 {
   public static void main(String[] args)
@@ -147,13 +165,9 @@ class Main
     {
       System.out.println("ファイル(" + args[0] + ")を開きました。");
 
-      JnlHeader jnlHeader = new JnlHeader(in);
-
-      System.out.printf("%s/\n", jnlHeader.year());
-      jnlHeader.print();
-      System.out.printf("date : %s\n", jnlHeader.date());
-      System.out.printf("dateLen : %d\n", jnlHeader.dataLen());
-      System.out.printf("time : %s\n", jnlHeader.time());
+      JnlRecord jnlRecord = new JnlRecord(in);
+      System.out.printf("date : %s, time : %s, dataLen : %d\n",
+          jnlRecord.h.date(), jnlRecord.h.time(), jnlRecord.h.dataLen());
     }
     catch(IOException e)
     {
