@@ -6,9 +6,11 @@
 
 int main(int argc, char *argv[])
 {
+  constexpr int buffer_size = 20 * 1024 * 1024;
+
   if(argc == 1)
   {
-    std::vector<char> buffer = std::vector<char>(20 * 1024 * 1024);
+    std::vector<char> buffer = std::vector<char>(buffer_size);
     Jnl::record::proc(buffer, std::cin, std::cout);
   }
   else if(argc == 2 && 0 == strcmp("-h", argv[1]))
@@ -17,7 +19,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    std::vector<char> buffer = std::vector<char>(20 * 1024 * 1024);
+    std::vector<char> buffer = std::vector<char>(buffer_size);
 
     for(int i = 1; i < argc; ++i)
     {
