@@ -7,9 +7,6 @@ public class File
 {
   public static void asciiDump(InputStream in) throws IOException
   {
-    final int buffer_size = 20 * 1024 * 1024;
-    byte[] buffer = new byte[buffer_size];
-
     while(true)
     {
       Record Record = jnl.Record.read(in);
