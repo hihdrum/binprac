@@ -19,7 +19,7 @@ class Record
     final Header h = Header.read(in);
     final byte[] data = new byte[h.dataLen()];
 
-    int readByte = in.readNBytes(data, 0, h.dataLen());
+    final int readByte = in.readNBytes(data, 0, h.dataLen());
     if(h.dataLen() != readByte)
     {
       throw new IOException("読込み長が足りませんでした。");

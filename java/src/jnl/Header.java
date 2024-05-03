@@ -16,8 +16,8 @@ class Header
 
   public static Header read(InputStream in) throws IOException
   {
-    byte[] buffer = new byte[SIZE];
-    int readByte = in.readNBytes(buffer, 0, SIZE);
+    final byte[] buffer = new byte[SIZE];
+    final int readByte = in.readNBytes(buffer, 0, SIZE);
 
     if(SIZE != readByte)
     {
