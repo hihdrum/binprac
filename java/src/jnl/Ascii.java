@@ -1,3 +1,5 @@
+package jnl;
+
 class Ascii
 {
   public static boolean isPrint(byte b)

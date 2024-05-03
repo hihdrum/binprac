@@ -1,3 +1,5 @@
+package jnl;
+
 enum JnlHeaderInfo
 {
   YEAR(0, 4),

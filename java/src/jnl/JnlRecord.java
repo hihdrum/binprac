@@ -1,3 +1,5 @@
+package jnl;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,7 +24,7 @@ class JnlRecord
   {
     for(int i = 0; i < h.dataLen(); i++)
     {
-      if(Ascii.isPrint(data[i]))
+      if(jnl.Ascii.isPrint(data[i]))
       {
         System.out.printf("%c", data[i]);
       }
@@ -37,7 +39,7 @@ class JnlRecord
   {
     for(int i = 0; i < h.dataLen(); i++)
     {
-      if(false == Ascii.isPrint(data[i]))
+      if(false == jnl.Ascii.isPrint(data[i]))
       {
         data[i] = '.';
       }

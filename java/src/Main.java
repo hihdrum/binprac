@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.io.FileDescriptor;
 import java.io.InputStream;
 import java.io.FileInputStream;
+
+import jnl.JnlFile;
+
 class Main
 {
   public static void main(String[] args)

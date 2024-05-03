@@ -1,7 +1,9 @@
+package jnl;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-class JnlFile
+public class JnlFile
 {
   public static void asciiDump(InputStream in) throws IOException
   {
