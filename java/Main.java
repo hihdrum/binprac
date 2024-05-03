@@ -151,6 +151,33 @@ class JnlRecord
       throw new IOException("読込み長が足りませんでした。");
     }
   }
+
+  public void asciiDump()
+  {
+    for(int i = 0; i < h.dataLen(); i++)
+    {
+      if(Ascii.isPrint(data[i]))
+      {
+        System.out.printf("%c", data[i]);
+      }
+      else
+      {
+        System.out.print('.');
+      }
+    }
+  }
+}
+
+class Ascii
+{
+  public static boolean isPrint(byte b)
+  {
+    if(0x00 <= b && b <= 0x1f)
+    {
+      return false;
+    }
+    return true;
+  }
 }
 
 class Main
@@ -168,6 +195,8 @@ class Main
       JnlRecord jnlRecord = new JnlRecord(in);
       System.out.printf("date : %s, time : %s, dataLen : %d\n",
           jnlRecord.h.date(), jnlRecord.h.time(), jnlRecord.h.dataLen());
+
+      jnlRecord.asciiDump();
     }
     catch(IOException e)
     {
