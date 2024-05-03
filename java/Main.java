@@ -227,13 +227,16 @@ class Main
     final int buffer_size = 20 * 1024 * 1024;
     byte[] buffer = new byte[buffer_size];
 
-    try(FileInputStream in = new FileInputStream(args[0]))
+    for(int i = 0; i < args.length; i++)
     {
-      JnlFile.asciiDump(in);
-    }
-    catch(IOException e)
-    {
-      e.printStackTrace();
+      try(FileInputStream in = new FileInputStream(args[i]))
+      {
+        JnlFile.asciiDump(in);
+      }
+      catch(IOException e)
+      {
+        e.printStackTrace();
+      }
     }
   }
 }
