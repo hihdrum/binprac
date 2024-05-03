@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.FileInputStream;
 
 enum JnlHeaderInfo
@@ -46,7 +47,7 @@ class JnlHeader
     this.h = h;
   }
 
-  JnlHeader(FileInputStream in) throws IOException
+  JnlHeader(InputStream in) throws IOException
   {
     byte[] buffer = new byte[SIZE];
     int readByte = in.read(buffer);
@@ -140,7 +141,7 @@ class JnlRecord
   JnlHeader h;
   byte[] data;
 
-  public JnlRecord(FileInputStream in) throws IOException
+  public JnlRecord(InputStream in) throws IOException
   {
     h = new JnlHeader(in);
     data = new byte[h.dataLen()];
@@ -203,7 +204,7 @@ class Ascii
 
 class JnlFile
 {
-  public static void asciiDump(FileInputStream in) throws IOException
+  public static void asciiDump(InputStream in) throws IOException
   {
     final int buffer_size = 20 * 1024 * 1024;
     byte[] buffer = new byte[buffer_size];
@@ -226,7 +227,7 @@ class Main
   {
     for(int i = 0; i < args.length; i++)
     {
-      try(FileInputStream in = new FileInputStream(args[i]))
+      try(InputStream in = new FileInputStream(args[i]))
       {
         JnlFile.asciiDump(in);
       }
