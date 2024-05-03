@@ -190,11 +190,14 @@ class Ascii
 {
   public static boolean isPrint(byte b)
   {
-    if(0x00 <= b && b <= 0x1f)
+    if(0x21 <= b && b <=0x7E)
+    {
+      return true;
+    }
+    else
     {
       return false;
     }
-    return true;
   }
 }
 
@@ -208,12 +211,26 @@ class Main
 
     try(FileInputStream in = new FileInputStream(args[0]))
     {
-      JnlRecord jnlRecord = new JnlRecord(in);
-      jnlRecord.printRecord();
+      while(true)
+      {
+        JnlRecord jnlRecord = new JnlRecord(in);
+        jnlRecord.printRecord();
+        if(0 == in.available())
+        {
+          break;
+        }
+      }
     }
     catch(IOException e)
     {
       e.printStackTrace();
     }
+
+    /*
+    for(int i = 0; i < 0xff; i++)
+    {
+      System.out.printf("%02x, %s\n", (byte)i, Ascii.isPrint((byte)i));
+    }
+    */
   }
 }
