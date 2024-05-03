@@ -12,7 +12,7 @@ public class File
 
     while(true)
     {
-      Record Record = new Record(in);
+      Record Record = jnl.Record.read(in);
       Record.toDisplayableData();
       Record.printRecord();
       if(0 == in.available())

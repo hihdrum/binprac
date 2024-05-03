@@ -5,19 +5,27 @@ import java.io.InputStream;
 
 class Record
 {
-  Header h;
-  byte[] data;
+  final Header h;
+  final byte[] data;
 
-  public Record(InputStream in) throws IOException
+  private Record(final Header h, final byte[] data)
   {
-    h = Header.read(in);
-    data = new byte[h.dataLen()];
+    this.h = h;
+    this.data = data;
+  }
+
+  public static Record read(InputStream in) throws IOException
+  {
+    final Header h = Header.read(in);
+    final byte[] data = new byte[h.dataLen()];
 
     int readByte = in.readNBytes(data, 0, h.dataLen());
     if(h.dataLen() != readByte)
     {
       throw new IOException("読込み長が足りませんでした。");
     }
+
+    return new Record(h, data);
   }
 
   public void asciiDump()
