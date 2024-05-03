@@ -9,12 +9,12 @@ class Header
 
   final private byte[] h;
 
-  Header(final byte[] h)
+  private Header(final byte[] h)
   {
     this.h = h;
   }
 
-  Header(InputStream in) throws IOException
+  public static Header read(InputStream in) throws IOException
   {
     byte[] buffer = new byte[SIZE];
     int readByte = in.readNBytes(buffer, 0, SIZE);
@@ -24,7 +24,7 @@ class Header
       throw new IOException("読込み長が足りませんでした。");
     }
 
-    h = buffer;
+    return new Header(buffer);
   }
 
   public String year()

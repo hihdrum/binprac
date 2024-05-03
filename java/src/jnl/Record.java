@@ -10,7 +10,7 @@ class Record
 
   public Record(InputStream in) throws IOException
   {
-    h = new Header(in);
+    h = Header.read(in);
     data = new byte[h.dataLen()];
 
     int readByte = in.readNBytes(data, 0, h.dataLen());
