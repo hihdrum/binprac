@@ -205,7 +205,6 @@ class Main
 {
   public static void main(String[] args)
   {
-
     final int buffer_size = 20 * 1024 * 1024;
     byte[] buffer = new byte[buffer_size];
 
@@ -225,12 +224,5 @@ class Main
     {
       e.printStackTrace();
     }
-
-    /*
-    for(int i = 0; i < 0xff; i++)
-    {
-      System.out.printf("%02x, %s\n", (byte)i, Ascii.isPrint((byte)i));
-    }
-    */
   }
 }
