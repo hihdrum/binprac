@@ -224,9 +224,6 @@ class Main
 {
   public static void main(String[] args)
   {
-    final int buffer_size = 20 * 1024 * 1024;
-    byte[] buffer = new byte[buffer_size];
-
     for(int i = 0; i < args.length; i++)
     {
       try(FileInputStream in = new FileInputStream(args[i]))
