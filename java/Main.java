@@ -166,6 +166,24 @@ class JnlRecord
       }
     }
   }
+
+  public void printHeader()
+  {
+    System.out.printf("HEADER,%s,%s,%s,%s\n", h.date(), h.time(), h.kind(), h.dataLen());
+  }
+
+  public void printAsciiDump()
+  {
+    System.out.printf("DATA:");
+    asciiDump();
+    System.out.println("");
+  }
+
+  public void printRecord()
+  {
+    printHeader();
+    printAsciiDump();
+  }
 }
 
 class Ascii
@@ -190,13 +208,8 @@ class Main
 
     try(FileInputStream in = new FileInputStream(args[0]))
     {
-      System.out.println("ファイル(" + args[0] + ")を開きました。");
-
       JnlRecord jnlRecord = new JnlRecord(in);
-      System.out.printf("date : %s, time : %s, dataLen : %d\n",
-          jnlRecord.h.date(), jnlRecord.h.time(), jnlRecord.h.dataLen());
-
-      jnlRecord.asciiDump();
+      jnlRecord.printRecord();
     }
     catch(IOException e)
     {
