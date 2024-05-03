@@ -3,7 +3,7 @@ package jnl;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class JnlFile
+public class File
 {
   public static void asciiDump(InputStream in) throws IOException
   {
@@ -12,9 +12,9 @@ public class JnlFile
 
     while(true)
     {
-      JnlRecord jnlRecord = new JnlRecord(in);
-      jnlRecord.toDisplayableData();
-      jnlRecord.printRecord();
+      Record Record = new Record(in);
+      Record.toDisplayableData();
+      Record.printRecord();
       if(0 == in.available())
       {
         break;

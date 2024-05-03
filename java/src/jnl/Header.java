@@ -3,18 +3,18 @@ package jnl;
 import java.io.IOException;
 import java.io.InputStream;
 
-class JnlHeader
+class Header
 {
   final static int SIZE = 26;
 
   final private byte[] h;
 
-  JnlHeader(final byte[] h)
+  Header(final byte[] h)
   {
     this.h = h;
   }
 
-  JnlHeader(InputStream in) throws IOException
+  Header(InputStream in) throws IOException
   {
     byte[] buffer = new byte[SIZE];
     int readByte = in.readNBytes(buffer, 0, SIZE);

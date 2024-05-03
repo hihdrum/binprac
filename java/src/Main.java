@@ -3,8 +3,6 @@ import java.io.FileDescriptor;
 import java.io.InputStream;
 import java.io.FileInputStream;
 
-import jnl.JnlFile;
-
 class Main
 {
   public static void main(String[] args)
@@ -13,7 +11,7 @@ class Main
     {
       try(InputStream in = new FileInputStream(FileDescriptor.in))
       {
-        JnlFile.asciiDump(in);
+        jnl.File.asciiDump(in);
       }
       catch(IOException e)
       {
@@ -31,7 +29,7 @@ class Main
       {
         try(InputStream in = new FileInputStream(args[i]))
         {
-          JnlFile.asciiDump(in);
+          jnl.File.asciiDump(in);
         }
         catch(IOException e)
         {

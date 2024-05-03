@@ -3,14 +3,14 @@ package jnl;
 import java.io.IOException;
 import java.io.InputStream;
 
-class JnlRecord
+class Record
 {
-  JnlHeader h;
+  Header h;
   byte[] data;
 
-  public JnlRecord(InputStream in) throws IOException
+  public Record(InputStream in) throws IOException
   {
-    h = new JnlHeader(in);
+    h = new Header(in);
     data = new byte[h.dataLen()];
 
     int readByte = in.readNBytes(data, 0, h.dataLen());
@@ -24,7 +24,7 @@ class JnlRecord
   {
     for(int i = 0; i < h.dataLen(); i++)
     {
-      if(jnl.Ascii.isPrint(data[i]))
+      if(Ascii.isPrint(data[i]))
       {
         System.out.printf("%c", data[i]);
       }
@@ -39,7 +39,7 @@ class JnlRecord
   {
     for(int i = 0; i < h.dataLen(); i++)
     {
-      if(false == jnl.Ascii.isPrint(data[i]))
+      if(false == Ascii.isPrint(data[i]))
       {
         data[i] = '.';
       }
