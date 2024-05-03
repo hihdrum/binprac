@@ -169,6 +169,19 @@ class JnlRecord
     }
   }
 
+  public byte[] toDisplayableData()
+  {
+    for(int i = 0; i < h.dataLen(); i++)
+    {
+      if(false == Ascii.isPrint(data[i]))
+      {
+        data[i] = '.';
+      }
+    }
+
+    return data;
+  }
+
   public void printHeader()
   {
     System.out.printf("HEADER,%s,%s,%s,%s\n", h.date(), h.time(), h.kind(), h.data());
@@ -177,7 +190,7 @@ class JnlRecord
   public void printAsciiDump()
   {
     System.out.printf("DATA:");
-    asciiDump();
+    System.out.write(data, 0, h.dataLen());
     System.out.println("");
   }
 
@@ -213,6 +226,7 @@ class JnlFile
     while(true)
     {
       JnlRecord jnlRecord = new JnlRecord(in);
+      jnlRecord.toDisplayableData();
       jnlRecord.printRecord();
       if(0 == in.available())
       {
