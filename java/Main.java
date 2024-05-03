@@ -201,6 +201,25 @@ class Ascii
   }
 }
 
+class JnlFile
+{
+  public static void asciiDump(FileInputStream in) throws IOException
+  {
+    final int buffer_size = 20 * 1024 * 1024;
+    byte[] buffer = new byte[buffer_size];
+
+    while(true)
+    {
+      JnlRecord jnlRecord = new JnlRecord(in);
+      jnlRecord.printRecord();
+      if(0 == in.available())
+      {
+        break;
+      }
+    }
+  }
+}
+
 class Main
 {
   public static void main(String[] args)
@@ -210,15 +229,7 @@ class Main
 
     try(FileInputStream in = new FileInputStream(args[0]))
     {
-      while(true)
-      {
-        JnlRecord jnlRecord = new JnlRecord(in);
-        jnlRecord.printRecord();
-        if(0 == in.available())
-        {
-          break;
-        }
-      }
+      JnlFile.asciiDump(in);
     }
     catch(IOException e)
     {
