@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project default="build" basedir=".">
+  <target name="init">
+    <mkdir dir="out" />
+  </target>
+
+  <target name="build" depends="init">
+    <javac includeantruntime="false" srcdir="src" destdir="out" />
+  </target>
+
+  <target name="clean">
+    <delete dir="out" />
+  </target>
+</project>
