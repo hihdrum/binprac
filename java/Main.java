@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.FileDescriptor;
 import java.io.InputStream;
 import java.io.FileInputStream;
 
@@ -50,7 +51,7 @@ class JnlHeader
   JnlHeader(InputStream in) throws IOException
   {
     byte[] buffer = new byte[SIZE];
-    int readByte = in.read(buffer);
+    int readByte = in.readNBytes(buffer, 0, SIZE);
 
     if(SIZE != readByte)
     {
@@ -146,7 +147,7 @@ class JnlRecord
     h = new JnlHeader(in);
     data = new byte[h.dataLen()];
 
-    int readByte = in.read(data);
+    int readByte = in.readNBytes(data, 0, h.dataLen());
     if(h.dataLen() != readByte)
     {
       throw new IOException("読込み長が足りませんでした。");
@@ -225,15 +226,34 @@ class Main
 {
   public static void main(String[] args)
   {
-    for(int i = 0; i < args.length; i++)
+    if(args.length == 0)
     {
-      try(InputStream in = new FileInputStream(args[i]))
+      try(InputStream in = new FileInputStream(FileDescriptor.in))
       {
         JnlFile.asciiDump(in);
       }
       catch(IOException e)
       {
         e.printStackTrace();
+      }
+    }
+    else if(args.length == 1 && "-h".equals(args[0]))
+    {
+      System.err.println("Usage : ファイル名");
+      System.exit(1);
+    }
+    else
+    {
+      for(int i = 0; i < args.length; i++)
+      {
+        try(InputStream in = new FileInputStream(args[i]))
+        {
+          JnlFile.asciiDump(in);
+        }
+        catch(IOException e)
+        {
+          e.printStackTrace();
+        }
       }
     }
   }
