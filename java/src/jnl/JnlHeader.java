@@ -29,55 +29,55 @@ class JnlHeader
 
   public String year()
   {
-    String str = new String(h, JnlHeaderInfo.YEAR.offset(), JnlHeaderInfo.YEAR.len());
+    String str = new String(h, HeaderInfo.YEAR.offset(), HeaderInfo.YEAR.len());
     return str;
   }
 
   public String month()
   {
-    String str = new String(h, JnlHeaderInfo.MONTH.offset(), JnlHeaderInfo.MONTH.len());
+    String str = new String(h, HeaderInfo.MONTH.offset(), HeaderInfo.MONTH.len());
     return str;
   }
 
   public String day()
   {
-    String str = new String(h, JnlHeaderInfo.DAY.offset(), JnlHeaderInfo.DAY.len());
+    String str = new String(h, HeaderInfo.DAY.offset(), HeaderInfo.DAY.len());
     return str;
   }
 
   public String hour()
   {
-    String str = new String(h, JnlHeaderInfo.HOUR.offset(), JnlHeaderInfo.HOUR.len());
+    String str = new String(h, HeaderInfo.HOUR.offset(), HeaderInfo.HOUR.len());
     return str;
   }
 
   public String minute()
   {
-    String str = new String(h, JnlHeaderInfo.MINUTE.offset(), JnlHeaderInfo.MINUTE.len());
+    String str = new String(h, HeaderInfo.MINUTE.offset(), HeaderInfo.MINUTE.len());
     return str;
   }
 
   public String second()
   {
-    String str = new String(h, JnlHeaderInfo.SECOND.offset(), JnlHeaderInfo.SECOND.len());
+    String str = new String(h, HeaderInfo.SECOND.offset(), HeaderInfo.SECOND.len());
     return str;
   }
 
   public String msecond()
   {
-    String str = new String(h, JnlHeaderInfo.MSECOND.offset(), JnlHeaderInfo.MSECOND.len());
+    String str = new String(h, HeaderInfo.MSECOND.offset(), HeaderInfo.MSECOND.len());
     return str;
   }
 
   public String kind()
   {
-    String str = new String(h, JnlHeaderInfo.KIND.offset(), JnlHeaderInfo.KIND.len());
+    String str = new String(h, HeaderInfo.KIND.offset(), HeaderInfo.KIND.len());
     return str;
   }
 
   public String data()
   {
-    String str = new String(h, JnlHeaderInfo.DATA.offset(), JnlHeaderInfo.DATA.len());
+    String str = new String(h, HeaderInfo.DATA.offset(), HeaderInfo.DATA.len());
     return str;
   }
 

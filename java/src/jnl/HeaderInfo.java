@@ -1,6 +1,6 @@
 package jnl;
 
-enum JnlHeaderInfo
+enum HeaderInfo
 {
   YEAR(0, 4),
   MONTH(4, 2),
@@ -17,7 +17,7 @@ enum JnlHeaderInfo
   private final int offset;
   private final int len;
 
-  private JnlHeaderInfo(int offset, int len)
+  private HeaderInfo(int offset, int len)
   {
     this.offset = offset;
     this.len = len;
