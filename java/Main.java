@@ -169,7 +169,7 @@ class JnlRecord
 
   public void printHeader()
   {
-    System.out.printf("HEADER,%s,%s,%s,%s\n", h.date(), h.time(), h.kind(), h.dataLen());
+    System.out.printf("HEADER,%s,%s,%s,%s\n", h.date(), h.time(), h.kind(), h.data());
   }
 
   public void printAsciiDump()
