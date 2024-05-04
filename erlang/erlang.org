@@ -1,0 +1,15 @@
+#+title: Erlangによる実装メモ
+
+- Erlangはkerlでインストールした。実行時には前もってactivateを行う。
+- Erlangのシェルは、erlコマンドで起動する。
+
+- erl
+  - help(). : ヘルプを表示する。
+  - c(モジュール) : モジュールのコンパイルしロードする。
+    #+begin_example
+    c(jnl).
+    c("jnl.erl").
+    #+end_example
+  - モジュールで定義され公開されている関数は、モジュール:関数名で呼び出すことができる。
+
+
