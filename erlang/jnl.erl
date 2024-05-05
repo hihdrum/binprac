@@ -87,10 +87,8 @@ read_record(IoDevice) ->
 % ジャーナルレコードの書込み
 write_jnl_record(IoDevice, JnlRecord) ->
 
-  #jnl_record{ header = HeaderRecord, data = DataBin } = JnlRecord,
-
-  ok = write_jnl_header(IoDevice, HeaderRecord),
-  write_jnl_data(IoDevice, DataBin).
+  ok = write_jnl_header(IoDevice, JnlRecord#jnl_record.header),
+  write_jnl_data(IoDevice, JnlRecord#jnl_record.data).
 
 %------------------------------------------------------------
 sample_run() ->
