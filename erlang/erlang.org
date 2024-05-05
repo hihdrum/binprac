@@ -2,7 +2,8 @@
 
 - Erlangはkerlでインストールした。実行時には前もってactivateを行う。
 - Erlangのシェルは、erlコマンドで起動する。
-
+- コメントは、%から始める。
+- erl実行時に作成したTermの情報は、上書きできないので、f()などで消去する。
 - erl
   - help(). : ヘルプを表示する。
   - c(モジュール) : モジュールのコンパイルしロードする。
@@ -11,5 +12,13 @@
     c("jnl.erl").
     #+end_example
   - モジュールで定義され公開されている関数は、モジュール:関数名で呼び出すことができる。
+- binary_to_integer(<<"123456">>)で整数値123456を得ることができる。
+- 実装時に使いそうなもの
+  - バイナリデータの連結方法
+  - replace
+  - replace_fun
 
 
+#+begin_example
+file:write(IoDevice, Bytes) -> ok | {error, Reason}
+#+end_example
