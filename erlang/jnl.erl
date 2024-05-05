@@ -52,7 +52,7 @@ read_data(HeaderRecord, IoDevice) ->
 % 表示可能文字を判定する関数
 % この関数をto_printableで利用したいが、ifで利用しようとした際に以下のエラーとなった。
 % call to local/imported function is_print_byte/1 is illegal in guard
-is_print(Byte) -> (16#21 =< Byte) and (Byte =< 16#7E).
+is_print(Byte) -> (16#20 =< Byte) and (Byte =< 16#7E).
 
 % 表示可能文字でない場合、'.'を返す関数
 to_printable(Byte) ->
