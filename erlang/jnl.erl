@@ -68,21 +68,23 @@ write_jnl_data(IoDevice, DataBin) ->
   PrintableList = lists:map(fun to_printable/1, DataList),
 
   ok = file:write(IoDevice, "DATA:"),
-  file:write(IoDevice, PrintableList).
+  file:write(IoDevice, PrintableList),
+  io:nl(IoDevice).
 
 % ジャーナルレコード
 %------------------------------------------------------------
 % (読込み元) -> ジャーナルレコード
 read_record(IoDevice) ->
 
-  % ジャーナルヘッダの読込み
-  {ok, HeaderBin} = read_header(IoDevice),
-  HeaderRecord = parse_jnl_header(HeaderBin),
-
-  % データ部の読込み
-  {ok, DataBin} = read_data(HeaderRecord, IoDevice),
-
-  #jnl_record{ header = HeaderRecord, data = DataBin}.
+  case read_header(IoDevice) of
+    {ok, HeaderBin} ->
+      HeaderRecord = parse_jnl_header(HeaderBin),
+      % データ部の読込み
+      {ok, DataBin} = read_data(HeaderRecord, IoDevice),
+      {ok, #jnl_record{ header = HeaderRecord, data = DataBin}};
+    eof -> eof;
+    {error, Reason} -> {error, Reason}
+  end.
 
 % ジャーナルレコードの書込み
 write_jnl_record(IoDevice, JnlRecord) ->
@@ -91,14 +93,23 @@ write_jnl_record(IoDevice, JnlRecord) ->
   write_jnl_data(IoDevice, JnlRecord#jnl_record.data).
 
 %------------------------------------------------------------
+read_write_loop(ReadFile, WriteFile) ->
+
+  case read_record(ReadFile) of
+    {ok ,JnlRecord} ->
+      write_jnl_record(WriteFile, JnlRecord),
+      read_write_loop(ReadFile, WriteFile);
+    eof -> eof;
+    {error, Reason} -> {error, Reason}
+  end.
+
+%------------------------------------------------------------
 sample_run() ->
   SampleFile = sample_file(),
   {ok, ReadFile} = file:open(SampleFile, [read, binary, raw]),
   {ok, WriteFile} = file:open("a", [write, binary]),
 
-  JnlRecord = read_record(ReadFile),
-
-  ok = write_jnl_record(WriteFile, JnlRecord),
+  read_write_loop(ReadFile, WriteFile),
 
   file:close(ReadFile),
   file:close(WriteFile),
