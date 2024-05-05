@@ -9,3 +9,8 @@
           kind,
           data_len
          }).
+
+-record(jnl_record, {
+          header,
+          data
+         }).

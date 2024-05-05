@@ -82,10 +82,12 @@ read_record(IoDevice) ->
   % データ部の読込み
   {ok, DataBin} = read_data(HeaderRecord, IoDevice),
 
-  {HeaderRecord, DataBin}.
+  #jnl_record{ header = HeaderRecord, data = DataBin}.
 
 % ジャーナルレコードの書込み
-write_jnl_record(IoDevice, HeaderRecord, DataBin) ->
+write_jnl_record(IoDevice, JnlRecord) ->
+
+  #jnl_record{ header = HeaderRecord, data = DataBin } = JnlRecord,
 
   ok = write_jnl_header(IoDevice, HeaderRecord),
   write_jnl_data(IoDevice, DataBin).
@@ -96,9 +98,9 @@ sample_run() ->
   {ok, ReadFile} = file:open(SampleFile, [read, binary, raw]),
   {ok, WriteFile} = file:open("a", [write, binary]),
 
-  {HeaderRecord, DataBin} = read_record(ReadFile),
+  JnlRecord = read_record(ReadFile),
 
-  ok = write_jnl_record(WriteFile, HeaderRecord, DataBin),
+  ok = write_jnl_record(WriteFile, JnlRecord),
 
   file:close(ReadFile),
   file:close(WriteFile),
