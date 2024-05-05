@@ -103,6 +103,12 @@ read_write_loop(ReadFile, WriteFile) ->
     {error, Reason} -> {error, Reason}
   end.
 
+proc_jnl_file(ReadFileName) ->
+  {ok, ReadFile} = file:open(ReadFileName, [read, binary, raw]),
+  read_write_loop(ReadFile, standard_io),
+  file:close(ReadFile),
+  ok.
+
 %------------------------------------------------------------
 sample_run() ->
   SampleFile = sample_file(),
