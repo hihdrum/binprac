@@ -13,6 +13,17 @@ void PrintHeader(struct jnl_header * h)
   putchar('\n');
 }
 
+void ToPrintable(char *pc, int len)
+{
+  for(int i = 0; i < len; i++)
+  {
+    if(!isprint(pc[i]))
+    {
+      pc[i] = '.';
+    }
+  }
+}
+
 const int dataBufferSize = 20 * 1024 * 1024;
 char *dataBuffer;
 
@@ -44,8 +55,15 @@ void dumpStream(FILE *fp)
       exit(1);
     }
 
+    ToPrintable(dataBuffer, dataLen);
+
     printf("DATA:");
-    asciiDump(dataBuffer, dataLen);
+    int retFwrite = fwrite(dataBuffer, sizeof(char), dataLen, stdout);
+    if(retFwrite != dataLen)
+    {
+      perror("データfwrite異常");
+      exit(1);
+    }
     putchar('\n');
   }
 }
