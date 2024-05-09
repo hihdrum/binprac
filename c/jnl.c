@@ -1,7 +1,9 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "jnl.h"
 
-void printJnlHeader(struct jnl_header * h)
+void JnlHeader_Print(struct jnl_header * h)
 {
   printf("%*.*s/%*.*s/%*.*s,%*.*s:%*.*s:%*.*s.%*.*s,%*.*s,%*.*s",
       JNL_YEAR_LEN, JNL_YEAR_LEN, h->year,
@@ -15,3 +17,13 @@ void printJnlHeader(struct jnl_header * h)
       JNL_DATA_LEN, JNL_DATA_LEN, h->dataLen);
 }
 
+int JnlHeader_DataLen(struct jnl_header * h)
+{
+  char dataLenBuf[JNL_DATA_LEN + 1];
+  memcpy(dataLenBuf, h->dataLen, JNL_DATA_LEN);
+  dataLenBuf[JNL_DATA_LEN] = '\0';
+
+  int dataLen = atoi(dataLenBuf);
+
+  return dataLen;
+}

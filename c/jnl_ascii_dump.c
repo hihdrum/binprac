@@ -6,6 +6,13 @@
 
 void asciiDump(char *pc, int len);
 
+void PrintHeader(struct jnl_header * h)
+{
+  printf("HEADER,");
+  JnlHeader_Print(h);
+  putchar('\n');
+}
+
 const int dataBufferSize = 20 * 1024 * 1024;
 char *dataBuffer;
 
@@ -26,15 +33,9 @@ void dumpStream(FILE *fp)
       exit(1);
     }
 
-    printf("HEADER,");
-    printJnlHeader(&jnlh);
-    putchar('\n');
+    PrintHeader(&jnlh);
 
-    char dataLenBuf[JNL_DATA_LEN + 1];
-    memcpy(dataLenBuf, jnlh.dataLen, JNL_DATA_LEN);
-    dataLenBuf[JNL_DATA_LEN] = '\0';
-
-    int dataLen = atoi(dataLenBuf);
+    int dataLen = JnlHeader_DataLen(&jnlh);
 
     retFread = fread(dataBuffer, sizeof(char), dataLen, fp);
     if(retFread < dataLen)

@@ -29,6 +29,7 @@ struct jnl_header
 
 } __attribute__((packed));
 
-void printJnlHeader(struct jnl_header * h);
+void JnlHeader_Print(struct jnl_header * h);
+int JnlHeader_DataLen(struct jnl_header * h);
 
 #endif
