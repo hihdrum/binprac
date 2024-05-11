@@ -75,16 +75,6 @@ void dumpStream(FILE *fp)
 
     int dataLen = JnlHeader_DataLen(&pjnr->header);
     JnlRecord_ReadData(pjnr, fp);
-#if 0
-    int dataLen = JnlHeader_DataLen(&pjnr->header);
-
-    int retFread = fread(pjnr->data, sizeof(char), dataLen, fp);
-    if(retFread < dataLen)
-    {
-      perror("データfread異常");
-      exit(1);
-    }
-#endif
 
     ToPrintable(pjnr->data, dataLen);
     WriteData(pjnr->data, dataLen);
