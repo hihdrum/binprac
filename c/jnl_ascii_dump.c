@@ -2,49 +2,26 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include "jnl.h"
 
 void asciiDump(char *pc, int len);
 
-#define JNL_YEAR_LEN (4)
-#define JNL_MONTH_LEN (2)
-#define JNL_DAY_LEN (2)
-
-#define JNL_HOUR_LEN (2)
-#define JNL_MINUTE_LEN (2)
-#define JNL_SECOND_LEN (2)
-#define JNL_MSECOND_LEN (3)
-
-#define JNL_KIND_LEN (1)
-#define JNL_DATA_LEN (8)
-
-struct jnl_header
+void PrintHeader(struct jnl_header * h)
 {
-  char year[JNL_YEAR_LEN];
-  char month[JNL_MONTH_LEN];
-  char day[JNL_DAY_LEN];
+  printf("HEADER,");
+  JnlHeader_Print(h);
+  putchar('\n');
+}
 
-  char hour[JNL_HOUR_LEN];
-  char minute[JNL_MINUTE_LEN];
-  char second[JNL_SECOND_LEN];
-  char msecond[JNL_MSECOND_LEN];
-
-  char kind[JNL_KIND_LEN];
-  char dataLen[JNL_DATA_LEN];
-
-} __attribute__((packed));
-
-void printJnlHeader(struct jnl_header * h)
+void ToPrintable(char *pc, int len)
 {
-  printf("%*.*s/%*.*s/%*.*s,%*.*s:%*.*s:%*.*s.%*.*s,%*.*s,%*.*s",
-      JNL_YEAR_LEN, JNL_YEAR_LEN, h->year,
-      JNL_MONTH_LEN, JNL_MONTH_LEN, h->month,
-      JNL_DAY_LEN, JNL_DAY_LEN, h->day,
-      JNL_HOUR_LEN, JNL_HOUR_LEN, h->hour,
-      JNL_MINUTE_LEN, JNL_MINUTE_LEN, h->minute,
-      JNL_SECOND_LEN, JNL_SECOND_LEN, h->second,
-      JNL_MSECOND_LEN, JNL_MSECOND_LEN, h->msecond,
-      JNL_KIND_LEN, JNL_KIND_LEN, h->kind,
-      JNL_DATA_LEN, JNL_DATA_LEN, h->dataLen);
+  for(int i = 0; i < len; i++)
+  {
+    if(!isprint(pc[i]))
+    {
+      pc[i] = '.';
+    }
+  }
 }
 
 const int dataBufferSize = 20 * 1024 * 1024;
@@ -67,15 +44,9 @@ void dumpStream(FILE *fp)
       exit(1);
     }
 
-    printf("HEADER,");
-    printJnlHeader(&jnlh);
-    putchar('\n');
+    PrintHeader(&jnlh);
 
-    char dataLenBuf[JNL_DATA_LEN + 1];
-    memcpy(dataLenBuf, jnlh.dataLen, JNL_DATA_LEN);
-    dataLenBuf[JNL_DATA_LEN] = '\0';
-
-    int dataLen = atoi(dataLenBuf);
+    int dataLen = JnlHeader_DataLen(&jnlh);
 
     retFread = fread(dataBuffer, sizeof(char), dataLen, fp);
     if(retFread < dataLen)
@@ -84,8 +55,15 @@ void dumpStream(FILE *fp)
       exit(1);
     }
 
+    ToPrintable(dataBuffer, dataLen);
+
     printf("DATA:");
-    asciiDump(dataBuffer, dataLen);
+    int retFwrite = fwrite(dataBuffer, sizeof(char), dataLen, stdout);
+    if(retFwrite != dataLen)
+    {
+      perror("データfwrite異常");
+      exit(1);
+    }
     putchar('\n');
   }
 }
