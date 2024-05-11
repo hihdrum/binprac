@@ -24,9 +24,7 @@ void update_printable(char *pc, int len)
   for(int i = 0; i < len; i++)
   {
     if(!isprint(pc[i]))
-    {
       pc[i] = '.';
-    }
   }
 }
 
@@ -37,9 +35,7 @@ void dump_stream(FILE *fp)
     struct jnl_record * const pjnr = (struct jnl_record *)buffer;
     int retReadJnlRecord = JnlRecord_Read(pjnr, fp);
     if(0 != retReadJnlRecord)
-    {
       break;
-    }
 
     JnlHeader_PrintToAsciiDump(&pjnr->header, stdout);
 

@@ -41,9 +41,7 @@ int JnlHeader_Read(struct jnl_header *pjnh, FILE *in)
   if(1 != retFread)
   {
     if(feof(in))
-    {
       return EOF;
-    }
 
     perror("ジャーナルヘッダfread異常");
     exit(1);
@@ -71,9 +69,7 @@ int JnlRecord_Read(struct jnl_record *pjnr, FILE *in)
 {
   int retReadJnlHeader = JnlHeader_Read(&pjnr->header, in);
   if(0 != retReadJnlHeader)
-  {
     return EOF;
-  }
 
   JnlRecord_ReadData(pjnr, in);
 
