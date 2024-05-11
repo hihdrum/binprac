@@ -63,7 +63,7 @@ void dumpStream(FILE *fp)
       break;
     }
 
-    JnlHeader_PrintToAsciiDump(&pjnr->header);
+    JnlHeader_PrintToAsciiDump(&pjnr->header, stdout);
 
     int dataLen = JnlHeader_DataLen(&pjnr->header);
 

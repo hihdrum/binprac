@@ -29,8 +29,8 @@ struct jnl_header
 
 } __attribute__((packed));
 
-void JnlHeader_Print(const struct jnl_header * const h);
-void JnlHeader_PrintToAsciiDump(const struct jnl_header * const h);
+void JnlHeader_Print(const struct jnl_header * const h, FILE *out);
+void JnlHeader_PrintToAsciiDump(const struct jnl_header * const h, FILE *out);
 int JnlHeader_DataLen(const struct jnl_header * const h);
 int JnlHeader_Read(struct jnl_header *pjnh, FILE *in);
 

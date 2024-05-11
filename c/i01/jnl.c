@@ -3,9 +3,9 @@
 #include <string.h>
 #include "jnl.h"
 
-void JnlHeader_Print(const struct jnl_header * const h)
+void JnlHeader_Print(const struct jnl_header * const h, FILE *out)
 {
-  printf("%*.*s/%*.*s/%*.*s,%*.*s:%*.*s:%*.*s.%*.*s,%*.*s,%*.*s",
+  fprintf(out, "%*.*s/%*.*s/%*.*s,%*.*s:%*.*s:%*.*s.%*.*s,%*.*s,%*.*s",
       JNL_YEAR_LEN, JNL_YEAR_LEN, h->year,
       JNL_MONTH_LEN, JNL_MONTH_LEN, h->month,
       JNL_DAY_LEN, JNL_DAY_LEN, h->day,
@@ -17,11 +17,11 @@ void JnlHeader_Print(const struct jnl_header * const h)
       JNL_DATA_LEN, JNL_DATA_LEN, h->dataLen);
 }
 
-void JnlHeader_PrintToAsciiDump(const struct jnl_header * h)
+void JnlHeader_PrintToAsciiDump(const struct jnl_header * h, FILE *out)
 {
-  printf("HEADER,");
-  JnlHeader_Print(h);
-  putchar('\n');
+  fprintf(out, "HEADER,");
+  JnlHeader_Print(h, out);
+  fputc('\n', out);
 }
 
 int JnlHeader_DataLen(const struct jnl_header * const h)
@@ -60,6 +60,7 @@ int JnlRecord_ReadData(struct jnl_record *pjnr, FILE *in)
   if(retFread < dataLen)
   {
     perror("データfread異常");
+    JnlHeader_PrintToAsciiDump(&pjnr->header, stderr);
     exit(1);
   }
 
