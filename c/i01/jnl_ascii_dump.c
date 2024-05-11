@@ -64,23 +64,17 @@ void dumpStream(FILE *fp)
   while(1)
   {
     struct jnl_header jnlh;
-    size_t retFread = fread(&jnlh, sizeof(jnlh), 1, fp);
-    if(1 != retFread)
+    int retReadJnlHeader = JnlHeader_Read(&jnlh, fp);
+    if(0 != retReadJnlHeader)
     {
-      if(feof(fp))
-      {
-        break;
-      }
-
-      perror("ジャーナルヘッダfread異常");
-      exit(1);
+      break;
     }
 
     PrintHeader(&jnlh);
 
     int dataLen = JnlHeader_DataLen(&jnlh);
 
-    retFread = fread(dataBuffer, sizeof(char), dataLen, fp);
+    int retFread = fread(dataBuffer, sizeof(char), dataLen, fp);
     if(retFread < dataLen)
     {
       perror("データfread異常");
