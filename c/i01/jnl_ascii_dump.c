@@ -4,13 +4,6 @@
 #include <string.h>
 #include "jnl.h"
 
-void PrintHeader(struct jnl_header * h)
-{
-  printf("HEADER,");
-  JnlHeader_Print(h);
-  putchar('\n');
-}
-
 void WriteData(char *data, int len)
 {
   printf("DATA:");
@@ -70,7 +63,7 @@ void dumpStream(FILE *fp)
       break;
     }
 
-    PrintHeader(&pjnr->header);
+    JnlHeader_PrintToAsciiDump(&pjnr->header);
 
     int dataLen = JnlHeader_DataLen(&pjnr->header);
 

@@ -17,6 +17,13 @@ void JnlHeader_Print(const struct jnl_header * const h)
       JNL_DATA_LEN, JNL_DATA_LEN, h->dataLen);
 }
 
+void JnlHeader_PrintToAsciiDump(const struct jnl_header * h)
+{
+  printf("HEADER,");
+  JnlHeader_Print(h);
+  putchar('\n');
+}
+
 int JnlHeader_DataLen(const struct jnl_header * const h)
 {
   char dataLenBuf[JNL_DATA_LEN + 1];
