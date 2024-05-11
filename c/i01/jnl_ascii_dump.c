@@ -64,9 +64,8 @@ void dumpStream(FILE *fp)
   while(1)
   {
     struct jnl_record * const pjnr = (struct jnl_record *)buffer;
-
-    int retReadJnlHeader = JnlHeader_Read(&pjnr->header, fp);
-    if(0 != retReadJnlHeader)
+    int retReadJnlRecord = JnlRecord_Read(pjnr, fp);
+    if(0 != retReadJnlRecord)
     {
       break;
     }
@@ -74,7 +73,6 @@ void dumpStream(FILE *fp)
     PrintHeader(&pjnr->header);
 
     int dataLen = JnlHeader_DataLen(&pjnr->header);
-    JnlRecord_ReadData(pjnr, fp);
 
     ToPrintable(pjnr->data, dataLen);
     WriteData(pjnr->data, dataLen);

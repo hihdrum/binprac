@@ -58,3 +58,16 @@ int JnlRecord_ReadData(struct jnl_record *pjnr, FILE *in)
 
   return 0;
 }
+
+int JnlRecord_Read(struct jnl_record *pjnr, FILE *in)
+{
+  int retReadJnlHeader = JnlHeader_Read(&pjnr->header, in);
+  if(0 != retReadJnlHeader)
+  {
+    return EOF;
+  }
+
+  JnlRecord_ReadData(pjnr, in);
+
+  return 0;
+}
