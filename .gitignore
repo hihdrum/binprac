@@ -1,5 +1,5 @@
 *.o
 *.swp
-*.~
+*~
 *.d
 java/out
