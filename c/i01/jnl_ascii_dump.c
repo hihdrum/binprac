@@ -4,7 +4,10 @@
 #include <string.h>
 #include "jnl.h"
 
-void WriteData(char *data, int len)
+const int bufferSize = 20 * 1024 * 1024;
+char *buffer;
+
+void write_data(char *data, int len)
 {
   printf("DATA:");
   int retFwrite = fwrite(data, sizeof(char), len, stdout);
@@ -16,7 +19,7 @@ void WriteData(char *data, int len)
   putchar('\n');
 }
 
-void ToPrintable(char *pc, int len)
+void update_printable(char *pc, int len)
 {
   for(int i = 0; i < len; i++)
   {
@@ -27,10 +30,7 @@ void ToPrintable(char *pc, int len)
   }
 }
 
-const int bufferSize = 20 * 1024 * 1024;
-char *buffer;
-
-void dumpStream(FILE *fp)
+void dump_stream(FILE *fp)
 {
   while(1)
   {
@@ -45,8 +45,8 @@ void dumpStream(FILE *fp)
 
     int dataLen = JnlHeader_DataLen(&pjnr->header);
 
-    ToPrintable(pjnr->data, dataLen);
-    WriteData(pjnr->data, dataLen);
+    update_printable(pjnr->data, dataLen);
+    write_data(pjnr->data, dataLen);
   }
 }
 
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
   if(argc == 1)
   {
-    dumpStream(stdin);
+    dump_stream(stdin);
   }
   else if(argc == 2 && 0 == strcmp("-h", argv[1]))
   {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     char **names = argv + 1;
     int num = argc - 1;
 
-    JnlFile_ProcFiles(names, num, dumpStream);
+    JnlFile_ProcFiles(names, num, dump_stream);
   }
 
   return 0;

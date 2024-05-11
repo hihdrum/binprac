@@ -45,7 +45,7 @@ int JnlRecord_Read(struct jnl_record *pjnr, FILE *in);
 
 FILE *JnlFile_Open(char *name);
 void JnlFile_Close(FILE *fp);
-void JnlFile_Proc(char *name, void (*proc)(FILE *in));
+void JnlFile_Proc(char *name, void (*proc)(FILE *));
 void JnlFile_ProcFiles(char *names[], int num, void (*proc)(FILE *));
 
 #endif
