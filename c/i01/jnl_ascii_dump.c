@@ -11,6 +11,18 @@ void PrintHeader(struct jnl_header * h)
   putchar('\n');
 }
 
+void WriteData(char *data, int len)
+{
+  printf("DATA:");
+  int retFwrite = fwrite(data, sizeof(char), len, stdout);
+  if(retFwrite != len)
+  {
+    perror("データfwrite異常");
+    exit(1);
+  }
+  putchar('\n');
+}
+
 void ToPrintable(char *pc, int len)
 {
   for(int i = 0; i < len; i++)
@@ -54,15 +66,7 @@ void dumpStream(FILE *fp)
     }
 
     ToPrintable(dataBuffer, dataLen);
-
-    printf("DATA:");
-    int retFwrite = fwrite(dataBuffer, sizeof(char), dataLen, stdout);
-    if(retFwrite != dataLen)
-    {
-      perror("データfwrite異常");
-      exit(1);
-    }
-    putchar('\n');
+    WriteData(dataBuffer, dataLen);
   }
 }
 
