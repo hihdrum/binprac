@@ -5,9 +5,11 @@ CFLAGS += -Wall
 CFLAGS += -MMD
 CFLAGS += -g3
 CFLAGS += -O0
+CFLAGS += -I ../libjnl
+CFLAGS += -L ../libjnl
 
-$(TARGET) : jnl_ascii_dump.o jnl_ascii_dump_imp.o jnl.o
-	$(CC) $(CFLAGS) $^ -o $@
+$(TARGET) : jnl_ascii_dump.o jnl_ascii_dump_imp.o
+	$(CC) $(CFLAGS) $^ -ljnl -o $@
 
 jnl_ascii_dump_po0 : jnl_ascii_dump.c jnl_ascii_dump_imp.c jnl.c
 	$(CC) -Wall -MMD -g3 -O0 -pg jnl_ascii_dump.c jnl_ascii_dump_imp.c jnl.c -o $@
