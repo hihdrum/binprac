@@ -70,11 +70,11 @@ void dumpStream(FILE *fp)
   }
 }
 
-void asciiDumpArgs(int argc, char *argv[])
+void asciiDumpFiles(char *names[], int num)
 {
-  for(int i = 1; i < argc; i++)
+  for(int i = 0; i < num; i++)
   {
-    FILE *fp = fopen(argv[i], "r");
+    FILE *fp = fopen(names[i], "r");
     if(NULL == fp)
     {
       perror("fopen異常");
@@ -118,7 +118,10 @@ int main(int argc, char *argv[])
   }
   else
   {
-    asciiDumpArgs(argc, argv);
+    char **names = argv + 1;
+    int num = argc - 1;
+
+    asciiDumpFiles(names, num);
   }
 
   return 0;
