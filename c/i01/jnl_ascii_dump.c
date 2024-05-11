@@ -50,18 +50,11 @@ void dumpStream(FILE *fp)
   }
 }
 
-void ProcJnlFile(char *name)
-{
-  FILE *fp = JnlFile_Open(name);
-  dumpStream(fp);
-  JnlFile_Close(fp);
-}
-
 void asciiDumpFiles(char *names[], int num)
 {
   for(int i = 0; i < num; i++)
   {
-    ProcJnlFile(names[i]);
+    JnlFile_Proc(names[i], dumpStream);
   }
 }
 

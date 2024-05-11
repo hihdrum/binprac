@@ -101,3 +101,10 @@ void JnlFile_Close(FILE *fp)
     exit(1);
   }
 }
+
+void JnlFile_Proc(char *name, void (*proc)(FILE *in))
+{
+  FILE *fp = JnlFile_Open(name);
+  proc(fp);
+  JnlFile_Close(fp);
+}
