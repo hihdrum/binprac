@@ -44,3 +44,17 @@ int JnlHeader_Read(struct jnl_header *pjnh, FILE *in)
 
   return 0;
 }
+
+int JnlRecord_ReadData(struct jnl_record *pjnr, FILE *in)
+{
+  const int dataLen = JnlHeader_DataLen(&pjnr->header);
+
+  int retFread = fread(pjnr->data, sizeof(char), dataLen, in);
+  if(retFread < dataLen)
+  {
+    perror("データfread異常");
+    exit(1);
+  }
+
+  return 0;
+}

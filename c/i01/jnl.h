@@ -33,4 +33,12 @@ void JnlHeader_Print(const struct jnl_header * const h);
 int JnlHeader_DataLen(const struct jnl_header * const h);
 int JnlHeader_Read(struct jnl_header *pjnh, FILE *in);
 
+struct jnl_record
+{
+  struct jnl_header header;
+  char data[0];
+};
+
+int JnlRecord_ReadData(struct jnl_record *pjnr, FILE *in);
+
 #endif

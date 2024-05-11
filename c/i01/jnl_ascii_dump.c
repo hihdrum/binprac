@@ -56,33 +56,38 @@ void JnlFileClose(FILE *fp)
   }
 }
 
-const int dataBufferSize = 20 * 1024 * 1024;
-char *dataBuffer;
+const int bufferSize = 20 * 1024 * 1024;
+char *buffer;
 
 void dumpStream(FILE *fp)
 {
   while(1)
   {
-    struct jnl_header jnlh;
-    int retReadJnlHeader = JnlHeader_Read(&jnlh, fp);
+    struct jnl_record * const pjnr = (struct jnl_record *)buffer;
+
+    int retReadJnlHeader = JnlHeader_Read(&pjnr->header, fp);
     if(0 != retReadJnlHeader)
     {
       break;
     }
 
-    PrintHeader(&jnlh);
+    PrintHeader(&pjnr->header);
 
-    int dataLen = JnlHeader_DataLen(&jnlh);
+    int dataLen = JnlHeader_DataLen(&pjnr->header);
+    JnlRecord_ReadData(pjnr, fp);
+#if 0
+    int dataLen = JnlHeader_DataLen(&pjnr->header);
 
-    int retFread = fread(dataBuffer, sizeof(char), dataLen, fp);
+    int retFread = fread(pjnr->data, sizeof(char), dataLen, fp);
     if(retFread < dataLen)
     {
       perror("データfread異常");
       exit(1);
     }
+#endif
 
-    ToPrintable(dataBuffer, dataLen);
-    WriteData(dataBuffer, dataLen);
+    ToPrintable(pjnr->data, dataLen);
+    WriteData(pjnr->data, dataLen);
   }
 }
 
@@ -103,8 +108,8 @@ void asciiDumpFiles(char *names[], int num)
 
 int main(int argc, char *argv[])
 {
-  dataBuffer = malloc(dataBufferSize);
-  if(NULL == dataBuffer)
+  buffer = malloc(bufferSize);
+  if(NULL == buffer)
   {
     perror("malloc異常");
     exit(1);
