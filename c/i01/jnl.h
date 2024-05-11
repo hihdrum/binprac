@@ -43,4 +43,7 @@ struct jnl_record
 int JnlRecord_ReadData(struct jnl_record *pjnr, FILE *in);
 int JnlRecord_Read(struct jnl_record *pjnr, FILE *in);
 
+FILE *JnlFile_Open(char *name);
+void JnlFile_Close(FILE *fp);
+
 #endif

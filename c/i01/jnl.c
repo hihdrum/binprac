@@ -79,3 +79,25 @@ int JnlRecord_Read(struct jnl_record *pjnr, FILE *in)
 
   return 0;
 }
+
+FILE *JnlFile_Open(char *name)
+{
+  FILE *fp = fopen(name, "r");
+  if(NULL == fp)
+  {
+    perror("fopen異常");
+    exit(1);
+  }
+
+  return fp;
+}
+
+void JnlFile_Close(FILE *fp)
+{
+  int retFclose = fclose(fp);
+  if(0 != retFclose)
+  {
+    perror("fclose異常");
+    exit(1);
+  }
+}

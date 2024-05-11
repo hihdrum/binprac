@@ -27,28 +27,6 @@ void ToPrintable(char *pc, int len)
   }
 }
 
-FILE * JnlFileOpen(char *name)
-{
-  FILE *fp = fopen(name, "r");
-  if(NULL == fp)
-  {
-    perror("fopen異常");
-    exit(1);
-  }
-
-  return fp;
-}
-
-void JnlFileClose(FILE *fp)
-{
-  int retFclose = fclose(fp);
-  if(0 != retFclose)
-  {
-    perror("fclose異常");
-    exit(1);
-  }
-}
-
 const int bufferSize = 20 * 1024 * 1024;
 char *buffer;
 
@@ -74,9 +52,9 @@ void dumpStream(FILE *fp)
 
 void ProcJnlFile(char *name)
 {
-  FILE *fp = JnlFileOpen(name);
+  FILE *fp = JnlFile_Open(name);
   dumpStream(fp);
-  JnlFileClose(fp);
+  JnlFile_Close(fp);
 }
 
 void asciiDumpFiles(char *names[], int num)
