@@ -27,3 +27,20 @@ int JnlHeader_DataLen(const struct jnl_header * const h)
 
   return dataLen;
 }
+
+int JnlHeader_Read(struct jnl_header *pjnh, FILE *in)
+{
+  size_t retFread = fread(pjnh, sizeof(struct jnl_header), 1, in);
+  if(1 != retFread)
+  {
+    if(feof(in))
+    {
+      return EOF;
+    }
+
+    perror("ジャーナルヘッダfread異常");
+    exit(1);
+  }
+
+  return 0;
+}
