@@ -108,3 +108,9 @@ void JnlFile_Proc(char *name, void (*proc)(FILE *in))
   proc(fp);
   JnlFile_Close(fp);
 }
+
+void JnlFile_ProcFiles(char *names[], int num, void (*proc)(FILE *))
+{
+  for(int i = 0; i < num; i++)
+    JnlFile_Proc(names[i], proc);
+}

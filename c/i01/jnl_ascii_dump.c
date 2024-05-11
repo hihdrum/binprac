@@ -50,14 +50,6 @@ void dumpStream(FILE *fp)
   }
 }
 
-void asciiDumpFiles(char *names[], int num)
-{
-  for(int i = 0; i < num; i++)
-  {
-    JnlFile_Proc(names[i], dumpStream);
-  }
-}
-
 int main(int argc, char *argv[])
 {
   buffer = malloc(bufferSize);
@@ -81,7 +73,7 @@ int main(int argc, char *argv[])
     char **names = argv + 1;
     int num = argc - 1;
 
-    asciiDumpFiles(names, num);
+    JnlFile_ProcFiles(names, num, dumpStream);
   }
 
   return 0;
