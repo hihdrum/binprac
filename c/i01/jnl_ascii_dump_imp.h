@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 
-void write_data(char *data, int len);
-void update_printable(char *pc, int len);
-void dump_stream(FILE *fp);
+void write_data(const char * const data, const int len);
+void update_printable(char * const pc, const int len);
+void dump_stream(FILE * const fp);
 
 #endif

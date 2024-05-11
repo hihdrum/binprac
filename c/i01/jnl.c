@@ -3,7 +3,7 @@
 #include <string.h>
 #include "jnl.h"
 
-void JnlHeader_Print(const struct jnl_header * const h, FILE *out)
+void JnlHeader_Print(const struct jnl_header * const h, FILE * const out)
 {
   fprintf(out, "%*.*s/%*.*s/%*.*s,%*.*s:%*.*s:%*.*s.%*.*s,%*.*s,%*.*s",
       JNL_YEAR_LEN, JNL_YEAR_LEN, h->year,
@@ -17,7 +17,7 @@ void JnlHeader_Print(const struct jnl_header * const h, FILE *out)
       JNL_DATA_LEN, JNL_DATA_LEN, h->dataLen);
 }
 
-void JnlHeader_PrintToAsciiDump(const struct jnl_header * h, FILE *out)
+void JnlHeader_PrintToAsciiDump(const struct jnl_header * const h, FILE * const out)
 {
   fprintf(out, "HEADER,");
   JnlHeader_Print(h, out);
@@ -35,7 +35,7 @@ int JnlHeader_DataLen(const struct jnl_header * const h)
   return dataLen;
 }
 
-int JnlHeader_Read(struct jnl_header *pjnh, FILE *in)
+int JnlHeader_Read(struct jnl_header * const pjnh, FILE * const in)
 {
   size_t retFread = fread(pjnh, sizeof(struct jnl_header), 1, in);
   if(1 != retFread)
@@ -50,11 +50,11 @@ int JnlHeader_Read(struct jnl_header *pjnh, FILE *in)
   return 0;
 }
 
-int JnlRecord_ReadData(struct jnl_record *pjnr, FILE *in)
+int JnlRecord_ReadData(struct jnl_record * const pjnr, FILE * const in)
 {
   const int dataLen = JnlHeader_DataLen(&pjnr->header);
 
-  int retFread = fread(pjnr->data, sizeof(char), dataLen, in);
+  const int retFread = fread(pjnr->data, sizeof(char), dataLen, in);
   if(retFread < dataLen)
   {
     perror("データfread異常");
@@ -65,9 +65,9 @@ int JnlRecord_ReadData(struct jnl_record *pjnr, FILE *in)
   return 0;
 }
 
-int JnlRecord_Read(struct jnl_record *pjnr, FILE *in)
+int JnlRecord_Read(struct jnl_record * const pjnr, FILE * const in)
 {
-  int retReadJnlHeader = JnlHeader_Read(&pjnr->header, in);
+  const int retReadJnlHeader = JnlHeader_Read(&pjnr->header, in);
   if(0 != retReadJnlHeader)
     return EOF;
 
@@ -76,9 +76,9 @@ int JnlRecord_Read(struct jnl_record *pjnr, FILE *in)
   return 0;
 }
 
-FILE *JnlFile_Open(char *name)
+FILE *JnlFile_Open(const char * const name)
 {
-  FILE *fp = fopen(name, "r");
+  FILE * const fp = fopen(name, "r");
   if(NULL == fp)
   {
     perror("fopen異常");
@@ -88,9 +88,9 @@ FILE *JnlFile_Open(char *name)
   return fp;
 }
 
-void JnlFile_Close(FILE *fp)
+void JnlFile_Close(FILE * const fp)
 {
-  int retFclose = fclose(fp);
+  const int retFclose = fclose(fp);
   if(0 != retFclose)
   {
     perror("fclose異常");
@@ -98,14 +98,14 @@ void JnlFile_Close(FILE *fp)
   }
 }
 
-void JnlFile_Proc(char *name, void (*proc)(FILE *in))
+void JnlFile_Proc(const char * const name, void (* const proc)(FILE * const))
 {
-  FILE *fp = JnlFile_Open(name);
+  FILE * const fp = JnlFile_Open(name);
   proc(fp);
   JnlFile_Close(fp);
 }
 
-void JnlFile_ProcFiles(char *names[], int num, void (*proc)(FILE *))
+void JnlFile_ProcFiles(char *names[], const int num, void (* const proc)(FILE * const))
 {
   for(int i = 0; i < num; i++)
     JnlFile_Proc(names[i], proc);

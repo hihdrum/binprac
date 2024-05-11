@@ -7,10 +7,10 @@
 const int bufferSize = 20 * 1024 * 1024;
 char *buffer;
 
-void write_data(char *data, int len)
+void write_data(const char *data, const int len)
 {
   printf("DATA:");
-  int retFwrite = fwrite(data, sizeof(char), len, stdout);
+  const int retFwrite = fwrite(data, sizeof(char), len, stdout);
   if(retFwrite != len)
   {
     perror("データfwrite異常");
@@ -19,7 +19,7 @@ void write_data(char *data, int len)
   putchar('\n');
 }
 
-void update_printable(char *pc, int len)
+void update_printable(char * const pc, const int len)
 {
   for(int i = 0; i < len; i++)
   {
@@ -28,18 +28,18 @@ void update_printable(char *pc, int len)
   }
 }
 
-void dump_stream(FILE *fp)
+void dump_stream(FILE * const fp)
 {
   while(1)
   {
     struct jnl_record * const pjnr = (struct jnl_record *)buffer;
-    int retReadJnlRecord = JnlRecord_Read(pjnr, fp);
+    const int retReadJnlRecord = JnlRecord_Read(pjnr, fp);
     if(0 != retReadJnlRecord)
       break;
 
     JnlHeader_PrintToAsciiDump(&pjnr->header, stdout);
 
-    int dataLen = JnlHeader_DataLen(&pjnr->header);
+    const int dataLen = JnlHeader_DataLen(&pjnr->header);
 
     update_printable(pjnr->data, dataLen);
     write_data(pjnr->data, dataLen);
