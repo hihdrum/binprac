@@ -94,17 +94,6 @@ void asciiDumpFiles(char *names[], int num)
 
 int main(int argc, char *argv[])
 {
-  int isUseStdin = 0;
-  if(argc == 1)
-  {
-    isUseStdin = 1;
-  }
-  else if(argc == 2 && 0 == strcmp("-h", argv[1]))
-  {
-    fprintf(stderr, "Usage : %s ファイル名\n", argv[0]);
-    exit(1);
-  }
-
   dataBuffer = malloc(dataBufferSize);
   if(NULL == dataBuffer)
   {
@@ -112,9 +101,14 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  if(isUseStdin)
+  if(argc == 1)
   {
     dumpStream(stdin);
+  }
+  else if(argc == 2 && 0 == strcmp("-h", argv[1]))
+  {
+    fprintf(stderr, "Usage : %s ファイル名\n", argv[0]);
+    exit(1);
   }
   else
   {
