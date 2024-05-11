@@ -10,3 +10,129 @@
      #+begin_example
      fwrite(データ, sizeof(char), データ長, 出力ストリーム)
      #+end_example
+
+* timeとgprofによる計測 実行プログラムのリビジョン情報 : 7cd9a8e931e217b220a41fe249ac81a8dc95cbe4
+
+** 最適化無し 標準出力
+
+*** timeの結果抜粋
+
+#+begin_example
+$ time ./jnl_ascii_dump_po0 ../../make_dummy_data/data00*
+:
+real	0m5.299s
+user	0m0.213s
+sys	0m0.406s
+#+end_example
+
+*** gprofの結果抜粋
+
+#+begin_example
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+ 83.33      0.20     0.20      100     2.00     2.00  update_printable
+ 16.67      0.24     0.04                             _init
+  0.00      0.24     0.00      200     0.00     0.00  JnlHeader_DataLen
+  0.00      0.24     0.00      110     0.00     0.00  JnlHeader_Read
+  0.00      0.24     0.00      110     0.00     0.00  JnlRecord_Read
+  0.00      0.24     0.00      100     0.00     0.00  JnlHeader_Print
+  0.00      0.24     0.00      100     0.00     0.00  JnlHeader_PrintToAsciiDump
+  0.00      0.24     0.00      100     0.00     0.00  JnlRecord_ReadData
+  0.00      0.24     0.00      100     0.00     0.00  write_data
+  0.00      0.24     0.00       10     0.00     0.00  JnlFile_Close
+  0.00      0.24     0.00       10     0.00     0.00  JnlFile_Open
+  0.00      0.24     0.00       10     0.00    20.00  JnlFile_Proc
+  0.00      0.24     0.00       10     0.00    20.00  dump_stream
+  0.00      0.24     0.00        1     0.00   200.00  JnlFile_ProcFiles
+#+end_example
+
+** 最適化無し ファイル出力
+
+*** timeの結果抜粋
+
+#+begin_example
+$ time ./jnl_ascii_dump_po0 ../../make_dummy_data/data00* > dpo0
+
+real	0m0.274s
+user	0m0.220s
+sys	0m0.053s
+#+end_example
+
+*** gprofの結果抜粋
+
+#+begin_example
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+ 88.89      0.16     0.16      100     1.60     1.60  update_printable
+ 11.11      0.18     0.02                             _init
+  0.00      0.18     0.00      200     0.00     0.00  JnlHeader_DataLen
+  0.00      0.18     0.00      110     0.00     0.00  JnlHeader_Read
+  0.00      0.18     0.00      110     0.00     0.00  JnlRecord_Read
+  0.00      0.18     0.00      100     0.00     0.00  JnlHeader_Print
+  0.00      0.18     0.00      100     0.00     0.00  JnlHeader_PrintToAsciiDump
+  0.00      0.18     0.00      100     0.00     0.00  JnlRecord_ReadData
+  0.00      0.18     0.00      100     0.00     0.00  write_data
+  0.00      0.18     0.00       10     0.00     0.00  JnlFile_Close
+  0.00      0.18     0.00       10     0.00     0.00  JnlFile_Open
+  0.00      0.18     0.00       10     0.00    16.00  JnlFile_Proc
+  0.00      0.18     0.00       10     0.00    16.00  dump_stream
+  0.00      0.18     0.00        1     0.00   160.00  JnlFile_ProcFiles
+#+end_example
+
+** 最適化(O2) 標準出力
+
+*** timeの結果抜粋
+
+#+begin_example
+$ time ./jnl_ascii_dump_po2 ../../make_dummy_data/data00*
+:
+real	0m5.371s
+user	0m0.087s
+sys	0m0.348s
+#+end_example
+
+*** gprofの結果抜粋
+
+#+begin_example
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+100.00      0.15     0.15       10    15.00    15.00  dump_stream
+  0.00      0.15     0.00      110     0.00     0.00  JnlHeader_Read
+  0.00      0.15     0.00      110     0.00     0.00  JnlRecord_Read
+  0.00      0.15     0.00      100     0.00     0.00  JnlHeader_DataLen
+  0.00      0.15     0.00      100     0.00     0.00  JnlHeader_Print
+  0.00      0.15     0.00      100     0.00     0.00  JnlHeader_PrintToAsciiDump
+  0.00      0.15     0.00      100     0.00     0.00  JnlRecord_ReadData
+  0.00      0.15     0.00        1     0.00   150.00  JnlFile_ProcFiles
+#+end_example
+
+** 最適化(O2) ファイル出力
+
+*** timeの結果抜粋
+
+#+begin_example
+$ time ./jnl_ascii_dump_po2 ../../make_dummy_data/data00* > dpo2
+
+real	0m0.139s
+user	0m0.090s
+sys	0m0.049s
+#+end_example
+
+*** gprofの結果抜粋
+
+#+begin_example
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+100.00      0.08     0.08       10     8.00     8.00  dump_stream
+  0.00      0.08     0.00      110     0.00     0.00  JnlHeader_Read
+  0.00      0.08     0.00      110     0.00     0.00  JnlRecord_Read
+  0.00      0.08     0.00      100     0.00     0.00  JnlHeader_DataLen
+  0.00      0.08     0.00      100     0.00     0.00  JnlHeader_Print
+  0.00      0.08     0.00      100     0.00     0.00  JnlHeader_PrintToAsciiDump
+  0.00      0.08     0.00      100     0.00     0.00  JnlRecord_ReadData
+  0.00      0.08     0.00        1     0.00    80.00  JnlFile_ProcFiles
+#+end_example
